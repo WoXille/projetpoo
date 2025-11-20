@@ -1,6 +1,8 @@
 #include "Grille.hpp"
 #include "Cell.hpp" 
 
+using namespace std;
+
 Grille::Grille(int l, int h)
     : largeur(l), hauteur(h)
 {
@@ -17,6 +19,10 @@ Grille::~Grille() {
     }
 }
 
+Cell* Grille::getCell(int x, int y) const {
+    return tabcell[x][y];
+}
+
 void Grille::init() {
     for (int i = 0; i < largeur; ++i) {
         for (int j = 0; j < hauteur; ++j) {
@@ -26,26 +32,25 @@ void Grille::init() {
 }
 
 int Grille::iteration(Cell* cell) {
-    int tmp = 0;
-    int cx = cell->getX();
-    int cy = cell->getY();
 
-    for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue; // on ignore la cellule elle-même
+    int x = cell->getX();
+    int y = cell->getY();
+    int voisinsVivants = 0;
 
-            int nx = cx + dx;
-            int ny = cy + dy;
+    for (int i = -1; i <= 1; ++i) {
+        for (int j = -1; j <= 1; ++j) {
+            if (i == 0 && j == 0) continue;
 
-            // on vérifie qu'on reste dans les bornes de la grille
-            if (nx >= 0 && nx < largeur &&
-                ny >= 0 && ny < hauteur) {
-                if (tabcell[nx][ny]->estVivante()) {
-                    tmp++;
+            int voisinX = x + i;
+            int voisinY = y + j;
+
+            if (voisinX >= 0 && voisinX < largeur && voisinY >= 0 && voisinY < hauteur) {
+                if (tabcell[voisinX][voisinY]->estVivante()) {
+                    voisinsVivants++;
                 }
             }
         }
     }
-    return tmp;
+    return voisinsVivants;
 }
 

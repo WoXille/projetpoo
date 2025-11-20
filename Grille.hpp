@@ -2,6 +2,7 @@
 #define GRILLE_HPP
 
 #include "Cell.hpp"
+#include <iostream>
 
 class Grille {
 private:
@@ -24,11 +25,15 @@ public:
         return hauteur;
     }
 
-    Cell* getCell(int x, int y) const {
-        return tabcell[x][y];
-    }
+    Cell* getCell(int x, int y) const;
 
     int iteration(Cell* cell);
+
+    Cell** gettabcell() {
+        return *tabcell;
+    } 
+
+
 };
 
 #endif // GRILLE_HPP
