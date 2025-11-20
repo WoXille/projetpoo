@@ -32,8 +32,6 @@ public:
     Cell** gettabcell() {
         return *tabcell;
     } 
-
-
 };
 
 #endif // GRILLE_HPP
