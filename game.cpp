@@ -67,21 +67,25 @@ Cell* Game::getCell(int x, int y) const {
 void Game::renderGrid(sf::RenderWindow& window) {
     window.clear();
     sf::Vector2i pos = sf::Mouse::getPosition(window);
-    cout << pos.x << endl; // Exemple de positionnement de la souris
+    
+    cout << pos.x /10 << " " << pos.y /10 << endl;
 
     sf::RectangleShape cellShape(sf::Vector2f(10.0f - 1.0f, 10.0f - 1.0f));
-
     for (int x = 0; x < grille.getLargeur(); ++x) {
         for (int y = 0; y < grille.getHauteur(); ++y) {
-            if (grille.getCell(x, y)->estVivante()) {
                 cellShape.setPosition(sf::Vector2f(
                     static_cast<float>(x * 10),
-                    static_cast<float>(y * 10)
-                ));
+                    static_cast<float>(y * 10)));
+            if (grille.getCell(x, y)->estVivante()) {
+                cellShape.setFillColor(sf::Color::White);
                 window.draw(cellShape);
             }
+            if (pos.x /10 == x && pos.y /10 == y) {
+                cellShape.setFillColor(sf::Color::Red);
+                window.draw(cellShape);
         }
     }
+}
 
     window.display();
 }
