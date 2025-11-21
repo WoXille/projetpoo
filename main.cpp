@@ -1,6 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <vector>
 #include <ctime>
 #include <cstdlib>
@@ -36,6 +38,13 @@ int main() {
 
 
 
+    Game game2(10,10);
+    sf::RenderWindow window2(
+        sf::VideoMode(sf::Vector2u(400, 400)),
+        "Menu Game of Life"
+    );
+    game2.startmenu(window2);
+
 
 
 
@@ -50,6 +59,8 @@ int main() {
         )),
         "Game of Life"
     );
+
+    game.startmusic();
 
     while (window.isOpen()) {
         while (const std::optional<sf::Event> event = window.pollEvent()) {

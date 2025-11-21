@@ -1,5 +1,7 @@
 #include "game.hpp"
 
+
+
 using namespace std;
 
 Game::Game(int largeur, int hauteur)
@@ -81,3 +83,28 @@ void Game::renderGrid(sf::RenderWindow& window) {
 
     window.display();
 }
+ void Game::startmusic() {
+    if (!music.openFromFile("kahoot_music.ogg")) {  // on va parler du .ogg plus bas
+        std::cerr << "Erreur lors du chargement de la musique." << std::endl;
+        return;
+    }
+    music.setLooping(true);
+    music.setVolume(100.f); // au cas où
+    music.play();
+}
+
+void Game::startmenu(sf::RenderWindow& window) {
+    window.clear(sf::Color::Black);
+    sf::RectangleShape titleBackground(sf::Vector2f(20.0f, 20.0f));
+    sf::Text text( sf::Font("Roboto"),"Game of Life Menu", 24); // Utilisez une police valide ici
+    titleBackground.setFillColor(sf::Color::Blue);
+    titleBackground.setPosition(sf::Vector2f(0.0f, 0.0f));
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sf::Vector2f(50.0f, 50.0f));
+    window.draw(titleBackground);
+    window.draw(text);
+
+    window.display();
+    
+}
+

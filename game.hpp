@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <vector>
 
 #include "Grille.hpp"
@@ -18,9 +20,12 @@ class Game {
     Cell* getCell(int x, int y) const;
     void test();
     void renderGrid(sf::RenderWindow& window);
+    void startmenu(sf::RenderWindow& window);
+    void startmusic();
 
     private:
     Grille grille;
+    sf::Music music;
 };
 
 #endif
