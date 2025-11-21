@@ -66,14 +66,9 @@ Cell* Game::getCell(int x, int y) const {
 
 void Game::renderGrid(sf::RenderWindow& window) {
     window.clear();
-<<<<<<< HEAD
-    
-    
-=======
     sf::Vector2i pos = sf::Mouse::getPosition(window);
     
     cout << pos.x /10 << " " << pos.y /10 << endl;
->>>>>>> 3c33f9a1281698aaba7afff06a60d0be9279bed7
 
     sf::RectangleShape cellShape(sf::Vector2f(10.0f - 1.0f, 10.0f - 1.0f));
     for (int x = 0; x < grille.getLargeur(); ++x) {
