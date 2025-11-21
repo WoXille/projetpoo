@@ -15,10 +15,12 @@
 
 using namespace std;
 
+
 int main() {
     const int longueur = 80;
     const int largeur = 80;
     const int cellSize = 10;
+    sf::Clock clock;
 
     Game game(longueur,largeur);
     game.getCell(4,5)->RendreVivante();
@@ -86,8 +88,16 @@ int main() {
             }
         }
 
+<<<<<<< HEAD
         game.renderGrid(window);    
          
+=======
+        if (clock.getElapsedTime() >= sf::milliseconds(100)) {
+        game.runIteration();
+        clock.restart();
+    }
+        game.renderGrid(window);       
+>>>>>>> 3c33f9a1281698aaba7afff06a60d0be9279bed7
     }
 
 
