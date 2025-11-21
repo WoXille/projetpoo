@@ -60,19 +60,34 @@ int main() {
         "Game of Life"
     );
 
-    game.startmusic();
+    //game.startmusic();
 
     while (window.isOpen()) {
         while (const std::optional<sf::Event> event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                sf::Vector2i pos = sf::Mouse::getPosition(window);
+                int x = pos.x / cellSize;
+                int y = pos.y / cellSize;
+                cout << "Clic en : " << x << ", " << y << endl;
+                if (x==0 && y==0){
+                    for (int i = 0; i < 1000; ++i) {
+                        game.runIteration();
+                        sf::sleep(sf::milliseconds(10));
+                        game.renderGrid(window); 
+                    }
+                    
+                }
+                else {
+                    game.getCell(x, y)->InverserVie();
+                }
+            }
         }
 
         game.renderGrid(window);    
-        getPosition (const WindowBase &relativeTo)
-        sf::sleep(sf::milliseconds(100));
-        game.runIteration();    
+         
     }
 
 
