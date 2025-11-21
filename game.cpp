@@ -84,7 +84,7 @@ void Game::renderGrid(sf::RenderWindow& window) {
     window.display();
 }
  void Game::startmusic() {
-    if (!music.openFromFile("kahoot_music.ogg")) {  // on va parler du .ogg plus bas
+    if (!music.openFromFile("assets/music/kahoot_music.ogg")) {  // on va parler du .ogg plus bas
         std::cerr << "Erreur lors du chargement de la musique." << std::endl;
         return;
     }
@@ -95,16 +95,26 @@ void Game::renderGrid(sf::RenderWindow& window) {
 
 void Game::startmenu(sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
-    sf::RectangleShape titleBackground(sf::Vector2f(20.0f, 20.0f));
-    sf::Text text( sf::Font("Roboto"),"Game of Life Menu", 24); // Utilisez une police valide ici
+
+    // Charger la police depuis un fichier
+    sf::Font font;
+    if (!font.openFromFile("assets/fonts/Roboto-Bold.ttf")) {
+        cerr << "Erreur : impossible de charger Roboto-Bold.ttf" << endl;
+        return;
+    }
+
+    // Fond du titre
+    sf::RectangleShape titleBackground(sf::Vector2f(400.f, 80.f));
     titleBackground.setFillColor(sf::Color::Blue);
-    titleBackground.setPosition(sf::Vector2f(0.0f, 0.0f));
+    titleBackground.setPosition(sf::Vector2f(0.f, 0.f));
+
+    // Texte : en SFML 3, on passe la font au constructeur
+    sf::Text text(font, "Game of Life Menu", 24);
     text.setFillColor(sf::Color::White);
-    text.setPosition(sf::Vector2f(50.0f, 50.0f));
+    text.setPosition(sf::Vector2f(50.f, 50.f));
+
     window.draw(titleBackground);
     window.draw(text);
-
     window.display();
-    
 }
 
