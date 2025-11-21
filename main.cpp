@@ -69,8 +69,8 @@ int main() {
             }
         }
 
-        game.renderGrid(window);
-
+        game.renderGrid(window);    
+        getPosition (const WindowBase &relativeTo)
         sf::sleep(sf::milliseconds(100));
         game.runIteration();    
     }

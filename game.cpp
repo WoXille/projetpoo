@@ -66,6 +66,8 @@ Cell* Game::getCell(int x, int y) const {
 
 void Game::renderGrid(sf::RenderWindow& window) {
     window.clear();
+    sf::Vector2i pos = sf::Mouse::getPosition(window);
+    cout << pos.x << endl; // Exemple de positionnement de la souris
 
     sf::RectangleShape cellShape(sf::Vector2f(10.0f - 1.0f, 10.0f - 1.0f));
 
