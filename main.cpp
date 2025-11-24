@@ -72,6 +72,7 @@ int main() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
             running = true;
         }
+        
 
 
         if (clock.getElapsedTime() >= sf::milliseconds(100) && running == true) {

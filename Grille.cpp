@@ -43,12 +43,22 @@ int Grille::iteration(Cell* cell) {
 
             int voisinX = x + i;
             int voisinY = y + j;
-
-            if (voisinX >= 0 && voisinX < largeur && voisinY >= 0 && voisinY < hauteur) {
-                if (tabcell[voisinX][voisinY]->estVivante()) {
-                    voisinsVivants++;
-                }
+            if (voisinX < 0){
+                voisinX = largeur -1;
             }
+            if (voisinX >= largeur){
+                voisinX = 0;
+            }
+            if (voisinY < 0){
+                voisinY = hauteur -1;
+            }
+            if (voisinY >= hauteur){
+                voisinY = 0;
+            }
+            if (tabcell[voisinX][voisinY]->estVivante()) {
+                voisinsVivants++;
+            }
+            
         }
     }
     return voisinsVivants;

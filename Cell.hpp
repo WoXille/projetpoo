@@ -22,7 +22,6 @@ public:
 
     void RendreVivante();
     void RendreMorte();
-    void InverserVie();
     bool estVivante() const { return etat->estVivante(); }
 };
 

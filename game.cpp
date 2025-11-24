@@ -68,7 +68,6 @@ void Game::renderGrid(sf::RenderWindow& window) {
     window.clear();
     sf::Vector2i pos = sf::Mouse::getPosition(window);
     
-    cout << pos.x /10 << " " << pos.y /10 << endl;
 
     sf::RectangleShape cellShape(sf::Vector2f(10.0f - 1.0f, 10.0f - 1.0f));
     for (int x = 0; x < grille.getLargeur(); ++x) {
