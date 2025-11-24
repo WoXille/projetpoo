@@ -48,7 +48,7 @@ int main() {
         "Game of Life"
     );
 
-    //game.startmusic();
+    game.startmusic();
     bool running = true;
     while (window.isOpen()) {
         while (const std::optional<sf::Event> event = window.pollEvent()) {
@@ -58,12 +58,15 @@ int main() {
             sf::Vector2i pos = sf::Mouse::getPosition(window);
                 int x = pos.x / 10;
                 int y = pos.y / 10;
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+
+            if (x<largeur && x>0 && y>0 && y<longueur) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
                 game.getCell(x, y)->RendreVivante();
             }
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
                 game.getCell(x, y)->RendreMorte();
             }
+        }
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
