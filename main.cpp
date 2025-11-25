@@ -8,6 +8,11 @@
 #include <cstdlib>
 #include <optional>
 
+#include <fstream>
+#include <string>
+#include <sstream>
+
+
 #include "CellVivante.hpp"
 #include "CellMorte.hpp"
 #include "Grille.hpp"
@@ -17,13 +22,34 @@ using namespace std;
 
 
 int main() {
-    const int longueur = 80;
-    const int largeur = 80;
+    
+    ifstream fichier("save.txt");
+    string ligne;
+    getline(fichier, ligne);
+    ligne.shrink_to_fit();
+    
+    int pos = ligne.find(' ');
+    const int longueur = stoi(ligne.substr(pos + 1));
+    const int largeur = stoi(ligne.substr(0, pos));
     const int cellSize = 10;
-    sf::Clock clock;
-    sf::Clock clock2;
 
     Game game(longueur,largeur);
+    cout << "Jeu créé avec une grille de " << longueur << "x" << largeur << "." << endl;
+    for (int i = 0; i < longueur*2+1; i++) {
+        cout << "Ligne " << i << endl;
+        getline(fichier, ligne);
+        for (int j = 0; j < int(ligne.size()-1); j++) {
+            cout << "Colonne " << j << ": " << ligne[j] << endl;ai 
+            if (ligne[j] == '1') {
+                game.getCell(i, j)->RendreVivante();
+                cout << "Cellule (" << i << ", " << j << ") rendue vivante." << endl;
+            }
+        }
+    }
+    fichier.close();
+
+    sf::Clock clock;
+    sf::Clock clock2;
 
 
     Game game2(10,10);
@@ -49,7 +75,7 @@ int main() {
     );
 
     //game.startmusic();
-    bool running = true;
+    bool running = false;
     while (window.isOpen()) {
         while (const std::optional<sf::Event> event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
