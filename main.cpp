@@ -19,7 +19,7 @@ using namespace std;
 int main() {
     const int longueur = 80;
     const int largeur = 80;
-    const int cellSize = 10;
+    const int cellSize = 20;
     sf::Clock clock;
     sf::Clock clock2;
 
@@ -56,8 +56,8 @@ int main() {
                 window.close();
             }
             sf::Vector2i pos = sf::Mouse::getPosition(window);
-                int x = pos.x / 10;
-                int y = pos.y / 10;
+                int x = pos.x / cellSize;
+                int y = pos.y / cellSize;
 
             if (x<largeur && x>0 && y>0 && y<longueur) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
@@ -83,7 +83,7 @@ int main() {
         clock.restart();
         }
         if (clock2.getElapsedTime() >= sf::milliseconds(10)) {
-        game.renderGrid(window); 
+        game.renderGrid(window, cellSize); 
         clock2.restart();
         }
 

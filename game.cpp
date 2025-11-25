@@ -64,23 +64,23 @@ Cell* Game::getCell(int x, int y) const {
     return grille.getCell(x, y);
 }
 
-void Game::renderGrid(sf::RenderWindow& window) {
+void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
     window.clear();
     sf::Vector2i pos = sf::Mouse::getPosition(window);
     
 
-    sf::RectangleShape cellShape(sf::Vector2f(10.0f - 1.0f, 10.0f - 1.0f));
+    sf::RectangleShape cellShape(sf::Vector2f(CellSize - 1.0f, CellSize - 1.0f));
     for (int x = 0; x < grille.getLargeur(); ++x) {
         for (int y = 0; y < grille.getHauteur(); ++y) {
                 cellShape.setPosition(sf::Vector2f(
-                    static_cast<float>(x * 10),
-                    static_cast<float>(y * 10)));
+                    static_cast<float>(x * CellSize),
+                    static_cast<float>(y * CellSize)));
             if (grille.getCell(x, y)->estVivante()) {
                 cellShape.setFillColor(sf::Color::White);
                 window.draw(cellShape);
             }
-            if (pos.x /10 == x && pos.y /10 == y) {
-                cellShape.setFillColor(sf::Color::Red);
+            if (pos.x / CellSize == x && pos.y / CellSize == y) {
+                cellShape.setFillColor(sf::Color(255, 0, 0, 100)); // Rouge semi-transparent
                 window.draw(cellShape);
         }
     }
@@ -99,7 +99,7 @@ void Game::renderGrid(sf::RenderWindow& window) {
 }
 
 void Game::startmenu(sf::RenderWindow& window) {
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color::Blue);
 
     // Charger la police depuis un fichier
     sf::Font font;
@@ -113,7 +113,7 @@ void Game::startmenu(sf::RenderWindow& window) {
     titleBackground.setFillColor(sf::Color::Blue);
     titleBackground.setPosition(sf::Vector2f(0.f, 0.f));
 
-    // Texte : en SFML 3, on passe la font au constructeur
+    // Textes du menu
     sf::Text text(font, "Game of Life Menu", 24);
     text.setFillColor(sf::Color::White);
     text.setPosition(sf::Vector2f(50.f, 50.f));

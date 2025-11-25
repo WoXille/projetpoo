@@ -19,7 +19,7 @@ class Game {
     void display() const;
     Cell* getCell(int x, int y) const;
     void test();
-    void renderGrid(sf::RenderWindow& window);
+    void renderGrid(sf::RenderWindow& window, int CellSize);
     void startmenu(sf::RenderWindow& window);
     void startmusic();
 
