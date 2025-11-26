@@ -12,15 +12,12 @@
 #include <string>
 #include <sstream>
 
-
 #include "CellVivante.hpp"
 #include "CellMorte.hpp"
 #include "Grille.hpp"
 #include "game.hpp"
-#include "Regle.hpp"
 
 using namespace std;
-
 
 int main() {
     // int rep; 
@@ -74,16 +71,16 @@ int main() {
     getline(fichier, ligne);
     ligne.shrink_to_fit();
     int pos = ligne.find(' ');
-    const int longueur = stoi(ligne.substr(pos + 1));
-    const int largeur = stoi(ligne.substr(0, pos));
+    const int largeur = stoi(ligne.substr(pos + 1));
+    const int longueur = stoi(ligne.substr(0, pos));
 
-    const int cellSize = 10;
+    const int cellSize = 20;
 
-    Game game(longueur,largeur);
+    Game game(largeur,longueur);
     
     for (int i = 0; i < longueur; i++) {
         getline(fichier, ligne);
-        for (int j = 0; j < largeur/2; j++) {
+        for (int j = 0; j < largeur; j++) {
             if (ligne[j*2] == '1') {
                 game.getCell(j, i)->RendreVivante();
             }
@@ -95,74 +92,68 @@ int main() {
     sf::Clock clock;
     sf::Clock clock2;
 
-
-    Game game2(longueur,largeur);
-
+    // Petit jeu pour le menu (10x10)
+    Game game2(10, 10);
     sf::RenderWindow window2(
         sf::VideoMode(sf::Vector2u(400, 400)),
         "Menu Game of Life"
     );
     game2.startmenu(window2);
 
-
-
-
-
-
-
-
+    // Fenêtre principale : largeur en X, longueur en Y
     sf::RenderWindow window(
         sf::VideoMode(sf::Vector2u(
-            static_cast<unsigned int>(largeur * cellSize),
-            static_cast<unsigned int>(longueur * cellSize)
+            static_cast<unsigned int>(largeur  * cellSize), // largeur = X
+            static_cast<unsigned int>(longueur * cellSize)  // longueur = Y
         )),
         "Game of Life"
     );
 
     //game.startmusic();
-    bool running = false;
+    bool running = true;
+
     while (window.isOpen()) {
-        // if (generation){
-        //     if (generation>=max_generations){
-        //         running = false;
-        //     }
-        // }
         while (const std::optional<sf::Event> event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
+
+            // Gestion souris
             sf::Vector2i pos = sf::Mouse::getPosition(window);
-                int x = pos.x / cellSize;
-                int y = pos.y / cellSize;
+            int x = pos.x / cellSize; // colonne
+            int y = pos.y / cellSize; // ligne
 
-            if (x<largeur && x>0 && y>0 && y<longueur) {
+            // bornes : 0 <= x < largeur, 0 <= y < longueur
+            if (x >= 0 && x < largeur && y >= 0 && y < longueur) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-                game.getCell(x, y)->RendreVivante();
+                    game.getCell(x, y)->RendreVivante();
+                }
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+                    game.getCell(x, y)->RendreMorte();
+                }
             }
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-                game.getCell(x, y)->RendreMorte();
-            }
-        }
         }
 
+        // Contrôles clavier
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
             running = false;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
             running = true;
         }
-        
 
-
-        if (clock.getElapsedTime() >= sf::milliseconds(100) && running == true) {
-        game.runIteration();
-        clock.restart();
+        // Mise à jour logique toutes les 100ms
+        if (clock.getElapsedTime() >= sf::milliseconds(100) && running) {
+            game.runIteration();
+            clock.restart();
         }
+
+        // Rendu toutes les 10ms (ou plus souvent)
         if (clock2.getElapsedTime() >= sf::milliseconds(10)) {
-        game.renderGrid(window, cellSize); 
-        clock2.restart();
+            game.renderGrid(window, cellSize);
+            clock2.restart();
         }
-
     }
+
     return 0;
 }
