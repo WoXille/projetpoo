@@ -16,68 +16,80 @@
 #include "CellMorte.hpp"
 #include "Grille.hpp"
 #include "game.hpp"
+#include "Regle.hpp"
 
 using namespace std;
 
 int main() {
-    // int rep; 
-    // int max_generations;
-    // int generation;
-    // cout << "Bienvenue dans le jeu de la vie" << endl;
-    // while (rep != 1 && rep != 2) {
-    //     cout << "Veuillez choisir votre mode de jeu:" << endl;
-    //     cout << "1 - Mode automatique" << endl;
-    //     cout << "2 - Nombre predefini de generations" << endl;
-    //     cin >> rep;
-    // }
-    // if (rep == 2) {
-    //     cout << "Combien de generations voulez-vous?" << endl;
-    //     cin >> max_generations;
-    // }
-    // rep=3;
-    // bool graph;
-    // while (rep != 1 && rep != 2) {
-    //     cout << "Maintenant votre mode d'affichage" << endl;
-    //     cout << "1 - Affichage console" << endl;
-    //     cout << "2 - Affichage graphique" << endl;
-    //     cin >> rep;
-    //     if (rep == 1){graph=true;}
-    //     else{graph = false;}
-    // }
-    // rep=3;
-    // while (rep != 1 && rep != 2) {
-    //     cout << "Maintenant votre mode d'initialisation" << endl;
-    //     cout << "1 - Initialisation vide" << endl;
-    //     cout << "2 - Initialisation via un fichier" << endl;
-    //     cin >> rep;
-    // }
-    // string ligne;
-    // if (rep == 2){
-    //     string filename;
-    //     cout << "Veuillez entrer le nom du fichier (avec son extension)" << endl;
-    //     cin >> filename;
-    //     ifstream fichier(filename);
-    //     getline(fichier, ligne);
-    //     ligne.shrink_to_fit();
-    // } 
-    // else {
-    //     cout << "Veuillez rentrer les dimensions souhaitees au format 'l h'" << endl;
-    //     cin >> ligne;
-    //     int pos = ligne.find(' ');
-    // }
+    Regle Regles;
+    int rep; 
+    int max_generations;
+    int generation_count = 0;
+
+    cout << "=====================================================\n";
+    cout << "          Bienvenue dans le Jeu de la Vie\n";
+    cout << "======================================================\n\n";
+
+    while (rep != 1 && rep != 2) {
+        cout << "Veuillez choisir votre mode de jeu :\n";
+        cout << "  1 - Mode automatique\n";
+        cout << "  2 - Nombre predefini de generations\n";
+        cout << "Votre choix : ";
+        cin >> rep;
+        cout << "\n";
+    }
+
+    if (rep == 2) {
+        cout << "----------------------------------------\n";
+        cout << "Combien de generations souhaitez-vous ?\n";
+        cout << "Entrez un nombre : ";
+        cin >> max_generations;
+        cout << "----------------------------------------\n\n";
+
+        Regles.set_max_generations(max_generations);
+        Regles.x_generation();
+    }
+
+    rep = 3;
+    while (rep != 1 && rep != 2) {
+        cout << "Veuillez choisir votre mode d'affichage :\n";
+        cout << "  1 - Affichage console\n";
+        cout << "  2 - Affichage graphique\n";
+        cout << "Votre choix : ";
+        cin >> rep;
+        cout << "\n";
+    }
+
+    if (rep == 1) {
+        Regles.afficher();
+    }
+
+    rep = 3;
+    while (rep != 1 && rep != 2) {
+        cout << "Veuillez choisir la methode d'initialisation :\n";
+        cout << "  1 - Initialisation vide\n";
+        cout << "  2 - Initialisation via un fichier\n";
+        cout << "Votre choix : ";
+        cin >> rep;
+        cout << "\n";
+    }
+
     string ligne;
-    string filename = "save.txt";
+    string filename;
+
+    cout << "Veuillez entrer le nom du fichier (avec extension) :\n";
+    cout << "Nom du fichier : ";
+    cin >> filename;
+
+
     ifstream fichier(filename);
     getline(fichier, ligne);
     ligne.shrink_to_fit();
     int pos = ligne.find(' ');
     const int largeur = stoi(ligne.substr(pos + 1));
     const int longueur = stoi(ligne.substr(0, pos));
-
     const int cellSize = 20;
-
     Game game(largeur,longueur);
-    
     for (int i = 0; i < longueur; i++) {
         getline(fichier, ligne);
         for (int j = 0; j < largeur; j++) {
@@ -86,7 +98,10 @@ int main() {
             }
         }
     }
-    fichier.close();
+        
+    
+    
+    
     cout << "Jeu cree avec une grille de " << longueur << "x" << largeur << "." << endl;
 
     sf::Clock clock;
@@ -117,6 +132,12 @@ int main() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
+            if (Regles.is_generation()) {
+                generation_count++;
+                if (generation_count >= Regles.get_max_generations()) {
+                    running = false;
+                }
+            }   
 
             // Gestion souris
             sf::Vector2i pos = sf::Mouse::getPosition(window);
@@ -144,6 +165,7 @@ int main() {
 
         // Mise à jour logique toutes les 100ms
         if (clock.getElapsedTime() >= sf::milliseconds(100) && running) {
+            game.display();
             game.runIteration();
             clock.restart();
         }

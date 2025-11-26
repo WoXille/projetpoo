@@ -11,12 +11,13 @@ private:
 
 
 public:
-    Regle(int l, int h);
-    ~Regle();
 
-    // Initialisation de la grille
+    ~Regle()= default;
+
     void afficher(){graphique = true;};
     void x_generation(){generation = true;};
+    bool is_generation(){return generation;};
+    void set_max_generations(int max_gen){max_generations = max_gen;};
 
 
 };

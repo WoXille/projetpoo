@@ -1,6 +1,7 @@
 #include "game.hpp"
 
-
+#include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -47,16 +48,19 @@ void Game::runIteration() {
 }
 
 void Game::display() const {
+    ofstream fichier("output.txt");
     for (int j = 0; j < grille.getHauteur(); ++j) {
+        fichier << "Generation :" << j << std::endl;
         for (int i = 0; i < grille.getLargeur(); ++i) {
             Cell* cell = grille.getCell(i, j);
             if (cell->estVivante()) {
-                cout << "1 ";
+                fichier << "1 ";
             } else {
-                cout << "0 ";
+                fichier << "0 ";
             }
         }
-        cout << endl;
+        fichier << "\n" << endl;
+        fichier.close();
     }
 }
 
