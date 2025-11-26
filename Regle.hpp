@@ -18,6 +18,7 @@ public:
     void x_generation(){generation = true;};
     bool is_generation(){return generation;};
     void set_max_generations(int max_gen){max_generations = max_gen;};
+    int get_max_generations(){return max_generations;};
 
 
 };
