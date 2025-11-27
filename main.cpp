@@ -108,8 +108,6 @@ int main() {
     }   
     
     
-    
-    cout << "Jeu cree avec une grille de " << longueur << "x" << largeur << "." << endl;
 
     sf::Clock clock;
     sf::Clock clock2;
