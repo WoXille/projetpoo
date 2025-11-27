@@ -15,6 +15,7 @@ public:
     ~Regle()= default;
 
     void afficher(){graphique = true;};
+    bool is_afficher(){return graphique;};
     void x_generation(){generation = true;};
     bool is_generation(){return generation;};
     void set_max_generations(int max_gen){max_generations = max_gen;};

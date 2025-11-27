@@ -47,10 +47,10 @@ void Game::runIteration() {
     }
 }
 
-void Game::display() const {
-    ofstream fichier("output.txt"); 
+void Game::display(int generation) const {
+    ofstream fichier("output.txt", ios::app); 
+    fichier << "Generation :" << generation << endl;
     for (int j = 0; j < grille.getHauteur(); ++j) {
-        fichier << "Generation :" << j << endl;
         for (int i = 0; i < grille.getLargeur(); ++i) {
             Cell* cell = grille.getCell(i, j);
             if (cell->estVivante()) {
@@ -61,6 +61,7 @@ void Game::display() const {
         }
         fichier << endl;
     }
+    fichier << endl; // Ajouter une ligne vide entre les générations
     fichier.close();
 }
 

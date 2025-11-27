@@ -16,7 +16,7 @@ class Game {
 
     void init();
     void runIteration();
-    void display() const;
+    void display(int generation) const;
     Cell* getCell(int x, int y) const;
     void test();
     void renderGrid(sf::RenderWindow& window, int CellSize);

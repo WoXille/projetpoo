@@ -38,7 +38,7 @@ int main() {
         cin >> rep;
         cout << "\n";
     }
-
+    
     if (rep == 2) {
         cout << "----------------------------------------" << endl;
         cout << "Combien de generations souhaitez-vous ?" << endl;
@@ -58,8 +58,7 @@ int main() {
         cin >> rep;
         cout << endl;
     }
-
-    if (rep == 1) {
+    if (rep==2){
         Regles.afficher();
     }
 
@@ -79,6 +78,8 @@ int main() {
     if (rep == 1) {
         cout << "Veuillez saisir les dimensions de la fenetre souhaitee au format 'Longueur largeur'" << endl;
         cin >> ligne;
+        ligne.shrink_to_fit();
+        pos = ligne.find(' ');
     }
     if (rep == 2) {
         cout << "Veuillez entrer le nom du fichier (avec extension) :" << endl;
@@ -133,57 +134,60 @@ int main() {
     //game.startmusic();
     bool running = true;
 
-    while (window.isOpen()) {
-        while (const std::optional<sf::Event> event = window.pollEvent()) {
-            if (event->is<sf::Event::Closed>()) {
-                window.close();
+    if (Regles.is_afficher()){
+        while (window.isOpen()) {
+            while (const std::optional<sf::Event> event = window.pollEvent()) {
+                if (event->is<sf::Event::Closed>()) {
+                    window.close();
+                }
+                if (Regles.is_generation()) {
+                    generation_count++;
+                    if (generation_count >= Regles.get_max_generations()) {
+                        running = false;
+                    }
+                }   
+
+                // Gestion souris
+                sf::Vector2i pos = sf::Mouse::getPosition(window);
+                int x = pos.x / cellSize; // colonne
+                int y = pos.y / cellSize; // ligne
+
+                // bornes : 0 <= x < largeur, 0 <= y < longueur
+                if (x >= 0 && x < largeur && y >= 0 && y < longueur) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                        game.getCell(x, y)->RendreVivante();
+                    }
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+                        game.getCell(x, y)->RendreMorte();
+                    }
+                }
             }
-            cout << "Generation: " << generation_count << "\n";
-            cout << Regles.get_max_generations() << "\n";
-            if (Regles.is_generation()) {
-                generation_count++;
-                if (generation_count >= Regles.get_max_generations()) {
-                    running = false;
-                }
-            }   
 
-            // Gestion souris
-            sf::Vector2i pos = sf::Mouse::getPosition(window);
-            int x = pos.x / cellSize; // colonne
-            int y = pos.y / cellSize; // ligne
+            // Contrôles clavier
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
+                running = false;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+                running = true;
+            }
 
-            // bornes : 0 <= x < largeur, 0 <= y < longueur
-            if (x >= 0 && x < largeur && y >= 0 && y < longueur) {
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-                    game.getCell(x, y)->RendreVivante();
-                }
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-                    game.getCell(x, y)->RendreMorte();
-                }
+            // Mise à jour logique toutes les 100ms
+            if (clock.getElapsedTime() >= sf::milliseconds(100) && running) {
+                game.runIteration();
+                clock.restart();
+            }
+
+            // Rendu toutes les 10ms (ou plus souvent)
+            if (clock2.getElapsedTime() >= sf::milliseconds(10)) {
+                game.renderGrid(window, cellSize);
+                clock2.restart();
             }
         }
-
-        // Contrôles clavier
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
-            running = false;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
-            running = true;
-        }
-
-        // Mise à jour logique toutes les 100ms
-        if (clock.getElapsedTime() >= sf::milliseconds(100) && running) {
-            game.display();
+    } else {
+        for (int i=0; i<=Regles.get_max_generations(); i++){
+            game.display(i);
             game.runIteration();
-            clock.restart();
-        }
-
-        // Rendu toutes les 10ms (ou plus souvent)
-        if (clock2.getElapsedTime() >= sf::milliseconds(10)) {
-            game.renderGrid(window, cellSize);
-            clock2.restart();
         }
     }
-
     return 0;
 }
