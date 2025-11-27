@@ -48,9 +48,9 @@ void Game::runIteration() {
 }
 
 void Game::display() const {
-    ofstream fichier("output.txt");
+    ofstream fichier("output.txt"); 
     for (int j = 0; j < grille.getHauteur(); ++j) {
-        fichier << "Generation :" << j << std::endl;
+        fichier << "Generation :" << j << endl;
         for (int i = 0; i < grille.getLargeur(); ++i) {
             Cell* cell = grille.getCell(i, j);
             if (cell->estVivante()) {
@@ -59,9 +59,9 @@ void Game::display() const {
                 fichier << "0 ";
             }
         }
-        fichier << "\n" << endl;
-        fichier.close();
+        fichier << endl;
     }
+    fichier.close();
 }
 
 Cell* Game::getCell(int x, int y) const {

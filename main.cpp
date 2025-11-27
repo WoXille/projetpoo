@@ -26,38 +26,37 @@ int main() {
     int max_generations;
     int generation_count = 0;
 
-    cout << "=====================================================\n";
+    cout << "======================================================"<< endl;
     cout << "          Bienvenue dans le Jeu de la Vie\n";
-    cout << "======================================================\n\n";
+    cout << "======================================================"<< endl;
 
     while (rep != 1 && rep != 2) {
-        cout << "Veuillez choisir votre mode de jeu :\n";
-        cout << "  1 - Mode automatique\n";
-        cout << "  2 - Nombre predefini de generations\n";
+        cout << "Veuillez choisir votre mode de jeu :" << endl;
+        cout << "  1 - Mode automatique" << endl;
+        cout << "  2 - Nombre predefini de generations" << endl;
         cout << "Votre choix : ";
         cin >> rep;
         cout << "\n";
     }
 
     if (rep == 2) {
-        cout << "----------------------------------------\n";
-        cout << "Combien de generations souhaitez-vous ?\n";
+        cout << "----------------------------------------" << endl;
+        cout << "Combien de generations souhaitez-vous ?" << endl;
         cout << "Entrez un nombre : ";
         cin >> max_generations;
-        cout << "----------------------------------------\n\n";
-
+        cout << "----------------------------------------" << endl << endl;
         Regles.set_max_generations(max_generations);
         Regles.x_generation();
     }
 
     rep = 3;
     while (rep != 1 && rep != 2) {
-        cout << "Veuillez choisir votre mode d'affichage :\n";
-        cout << "  1 - Affichage console\n";
-        cout << "  2 - Affichage graphique\n";
+        cout << "Veuillez choisir votre mode d'affichage :" << endl;
+        cout << "  1 - Affichage console" << endl;
+        cout << "  2 - Affichage graphique" << endl;
         cout << "Votre choix : ";
         cin >> rep;
-        cout << "\n";
+        cout << endl;
     }
 
     if (rep == 1) {
@@ -66,39 +65,46 @@ int main() {
 
     rep = 3;
     while (rep != 1 && rep != 2) {
-        cout << "Veuillez choisir la methode d'initialisation :\n";
-        cout << "  1 - Initialisation vide\n";
-        cout << "  2 - Initialisation via un fichier\n";
+        cout << "Veuillez choisir la methode d'initialisation :" << endl;
+        cout << "  1 - Initialisation vide" << endl;
+        cout << "  2 - Initialisation via un fichier" << endl;
         cout << "Votre choix : ";
         cin >> rep;
-        cout << "\n";
+        cout << endl;
     }
-
     string ligne;
     string filename;
-
-    cout << "Veuillez entrer le nom du fichier (avec extension) :\n";
-    cout << "Nom du fichier : ";
-    cin >> filename;
-
-
-    ifstream fichier(filename);
-    getline(fichier, ligne);
-    ligne.shrink_to_fit();
-    int pos = ligne.find(' ');
+    ifstream fichier;
+    int pos;
+    if (rep == 1) {
+        cout << "Veuillez saisir les dimensions de la fenetre souhaitee au format 'Longueur largeur'" << endl;
+        cin >> ligne;
+    }
+    if (rep == 2) {
+        cout << "Veuillez entrer le nom du fichier (avec extension) :" << endl;
+        cout << "Nom du fichier : ";
+        cin >> filename;
+        fichier.open(filename);
+        getline(fichier, ligne);
+        ligne.shrink_to_fit();
+        pos = ligne.find(' ');
+    }
+    
     const int largeur = stoi(ligne.substr(pos + 1));
     const int longueur = stoi(ligne.substr(0, pos));
     const int cellSize = 20;
     Game game(largeur,longueur);
-    for (int i = 0; i < longueur; i++) {
-        getline(fichier, ligne);
-        for (int j = 0; j < largeur; j++) {
-            if (ligne[j*2] == '1') {
-                game.getCell(j, i)->RendreVivante();
+
+    if (rep == 2) {
+        for (int i = 0; i < longueur; i++) {
+            getline(fichier, ligne);
+            for (int j = 0; j < largeur; j++) {
+                if (ligne[j*2] == '1') {
+                    game.getCell(j, i)->RendreVivante();
+                }
             }
         }
-    }
-        
+    }   
     
     
     
@@ -132,6 +138,8 @@ int main() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
+            cout << "Generation: " << generation_count << "\n";
+            cout << Regles.get_max_generations() << "\n";
             if (Regles.is_generation()) {
                 generation_count++;
                 if (generation_count >= Regles.get_max_generations()) {
