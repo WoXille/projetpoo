@@ -48,7 +48,11 @@ void Game::runIteration() {
 }
 
 void Game::display(int generation) const {
-    ofstream fichier("output.txt", ios::app); 
+    ofstream fichier("output.txt", ios::app);
+    if (!fichier.is_open()) {
+        cerr << "Erreur lors de l'ouverture du fichier output.txt" << endl;
+        return;
+    }
     fichier << "Generation :" << generation << endl;
     for (int j = 0; j < grille.getHauteur(); ++j) {
         for (int i = 0; i < grille.getLargeur(); ++i) {

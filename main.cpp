@@ -32,14 +32,14 @@ int main() {
 
     while (rep != 1 && rep != 2) {
         cout << "Veuillez choisir votre mode de jeu :" << endl;
-        cout << "  1 - Mode automatique" << endl;
-        cout << "  2 - Nombre predefini de generations" << endl;
+        cout << "  1 - Nombre predefini de generations" << endl;
+        cout << "  2 - Mode automatique" << endl;
         cout << "Votre choix : ";
         cin >> rep;
         cout << "\n";
     }
     
-    if (rep == 2) {
+    if (rep == 1) {
         cout << "----------------------------------------" << endl;
         cout << "Combien de generations souhaitez-vous ?" << endl;
         cout << "Entrez un nombre : ";
@@ -47,9 +47,10 @@ int main() {
         cout << "----------------------------------------" << endl << endl;
         Regles.set_max_generations(max_generations);
         Regles.x_generation();
+        rep = 3;
     }
 
-    rep = 3;
+    
     while (rep != 1 && rep != 2) {
         cout << "Veuillez choisir votre mode d'affichage :" << endl;
         cout << "  1 - Affichage console" << endl;
