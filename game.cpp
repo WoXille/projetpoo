@@ -24,7 +24,7 @@ void Game::test() {
 }
 
 
-void Game::runIteration() {
+void Game::runIteration(Regle * Regles) {
     int tempTab[100][100];
     for (int i = 0; i < grille.getLargeur(); ++i) {
         for (int j = 0; j < grille.getHauteur(); ++j) {
@@ -38,9 +38,9 @@ void Game::runIteration() {
             Cell* cell = grille.getCell(i, j);
             int voisinsVivants = tempTab[i][j];
 
-            if (!(cell->estVivante()) && voisinsVivants == 3) {
+            if (!(cell->estVivante()) && voisinsVivants == Regles->get_naissance()) {
                 cell->RendreVivante();
-            } else if (cell->estVivante() && (voisinsVivants < 2 || voisinsVivants > 3)) {
+            } else if (cell->estVivante() && (voisinsVivants < Regles->get_voisins_min() || voisinsVivants > Regles->get_voisins_max())) {
                 cell->RendreMorte();
             }
         }

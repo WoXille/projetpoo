@@ -7,7 +7,6 @@
 #include <ctime>
 #include <cstdlib>
 #include <optional>
-
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -30,6 +29,49 @@ int main() {
     cout << "          Bienvenue dans le Jeu de la Vie\n";
     cout << "======================================================"<< endl;
 
+    while (rep != 1 && rep != 2) {
+        cout << "Souhaitez-vous jouer ou changer les regles?" << endl;
+        cout << "  1 - Je veux jouer" << endl;
+        cout << "  2 - Je veux parametrer les regles" << endl;
+        cout << "Votre choix : ";
+        cin >> rep;
+        cout << "\n";
+        if (rep==2){
+            while (rep == 2 || rep == 1) {
+                cout << "Quelles regles souhaitez-vous modifier?" << endl;
+                cout << "  1 - Regle de naissance" << endl;
+                cout << "  2 - Regle de mort" << endl;
+                cout << "  3 - Retour au menu precedent" << endl;
+                cout << "Votre choix : ";
+                cin >> rep;
+                cout << "\n";
+                if (rep == 1) {
+                    int naissance;
+                    cout << "Entrez le nombre de voisins necessaires pour la naissance d'une cellule : ";
+                    cin >> naissance;
+                    Regles.set_rules(Regles.get_voisins_max(), Regles.get_voisins_min(), naissance);
+                    cout << "\n";
+                }
+                else if (rep == 2) {
+                    int voisins_min, voisins_max;
+                    cout << "Entrez le nombre minimum de voisins pour qu'une cellule vive survive : ";
+                    cin >> voisins_min;
+                    cout << "Entrez le nombre maximum de voisins pour qu'une cellule vive survive : ";
+                    cin >> voisins_max;
+                    if (voisins_min > voisins_max) {
+                        cout << "Erreur : le nombre minimum de voisins ne peut pas etre superieur au nombre maximum." << endl << endl;
+                        Regles.set_rules(voisins_min, voisins_max, Regles.get_naissance());
+                        rep = 3;
+                    } else {
+                        Regles.set_rules(voisins_max, voisins_min, Regles.get_naissance());
+                        cout << "\n";
+                    }
+                    
+                }
+            }
+        }   
+    }
+    rep = 3;
     while (rep != 1 && rep != 2) {
         cout << "Veuillez choisir votre mode de jeu :" << endl;
         cout << "  1 - Nombre predefini de generations" << endl;
@@ -77,10 +119,15 @@ int main() {
     ifstream fichier;
     int pos;
     if (rep == 1) {
-        cout << "Veuillez saisir les dimensions de la fenetre souhaitee au format 'Longueur largeur'" << endl;
+        cout << "Veuillez saisir la longueur que vous souhaitez :" << endl;
         cin >> ligne;
-        ligne.shrink_to_fit();
+        ligne += " "; 
+        cout << "Maintenant, veuillez saisir la largeur que vous souhaitez :" << endl;
+        cin >> filename;
+        ligne += filename;
         pos = ligne.find(' ');
+
+
     }
     if (rep == 2) {
         cout << "Veuillez entrer le nom du fichier (avec extension) :" << endl;
@@ -94,6 +141,7 @@ int main() {
     
     const int largeur = stoi(ligne.substr(pos + 1));
     const int longueur = stoi(ligne.substr(0, pos));
+    cout << "Dimensions de la grille : " << longueur << " x " << largeur << endl << endl;
     const int cellSize = 20;
     Game game(largeur,longueur);
 
@@ -159,6 +207,25 @@ int main() {
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
                         game.getCell(x, y)->RendreMorte();
                     }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) {
+                        game.getCell(x+1, y+1)->RendreVivante();
+                        game.getCell(x+1, y)->RendreVivante();
+                        game.getCell(x+1, y-1)->RendreVivante();
+                        game.getCell(x-1, y)->RendreVivante();
+                        game.getCell(x, y-1)->RendreVivante();
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) {
+                        game.getCell(x, y+1)->RendreVivante();
+                        game.getCell(x, y)->RendreVivante();
+                        game.getCell(x, y-1)->RendreVivante();
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C)) {
+                        for (int i = 0; i < largeur; ++i) {
+                            for (int j = 0; j < longueur; ++j) {
+                                game.getCell(i, j)->RendreMorte();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -172,7 +239,7 @@ int main() {
 
             // Mise à jour logique toutes les 100ms
             if (clock.getElapsedTime() >= sf::milliseconds(100) && running) {
-                game.runIteration();
+                game.runIteration(&Regles);
                 clock.restart();
             }
 
@@ -185,7 +252,7 @@ int main() {
     } else {
         for (int i=0; i<=Regles.get_max_generations(); i++){
             game.display(i);
-            game.runIteration();
+            game.runIteration(&Regles);
         }
     }
     return 0;

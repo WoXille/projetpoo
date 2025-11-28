@@ -8,14 +8,14 @@
 #include <vector>
 
 #include "Grille.hpp"
-
+#include "Regle.hpp"
 class Game {
  public:
     Game(int largeur, int hauteur);
     ~Game();
 
     void init();
-    void runIteration();
+    void runIteration(Regle * Regles);
     void display(int generation) const;
     Cell* getCell(int x, int y) const;
     void test();
