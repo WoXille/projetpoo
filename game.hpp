@@ -22,11 +22,16 @@ class Game {
     void renderGrid(sf::RenderWindow& window, int CellSize);
     void startmusic() { music.play(); };
     void stopmusic() { music.stop(); }
+    int getMode() const { return mode; }
+    void setMode(int m) { mode = m; }
 
     private:
     Grille grille;
     sf::Music music;
-    sf::Font font;
+    sf::Font Roboto;
+    sf::Font Cherolina;
+    sf::Font AstonScript;
+    int mode = 0; // 0 = normal, 1 = glider, 2 = helicopter
 };
 
 #endif

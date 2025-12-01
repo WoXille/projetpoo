@@ -1,0 +1,119 @@
+classDiagram
+
+    %% =========================
+    %% Classes principales
+    %% =========================
+    class Game {
+        +Game(int largeur, int hauteur)
+        +~Game()
+        +void init()
+        +void runIteration(Regle* Regles)
+        +void display(int generation, std::string filename) const
+        +Cell* getCell(int x, int y) const
+        +void test()
+        +void renderGrid(sf::RenderWindow& window, int CellSize)
+        +void startmenu(sf::RenderWindow& window)
+        +void startmusic()
+        +void stopmusic()
+        +int getMode() const
+        +void setMode(int m)
+
+        -Grille grille
+        -sf::Music music
+        -sf::Font Roboto
+        -sf::Font Cherolina
+        -sf::Font AstonScript
+        -int mode
+    }
+
+    class Grille {
+        +Grille(int l, int h)
+        +~Grille()
+        +void init()
+        +int getLargeur() const
+        +int getHauteur() const
+        +Cell* getCell(int x, int y) const
+        +int iteration(Cell* cell)
+        +Cell** gettabcell()
+
+        -int largeur
+        -int hauteur
+        -Cell* tabcell[100][100]
+    }
+
+    class Cell {
+        +Cell(int xCoord, int yCoord)
+        +~Cell()
+        +int getX() const
+        +int getY() const
+        +void RendreVivante()
+        +void RendreMorte()
+        +bool estVivante() const
+
+        -int x
+        -int y
+        -CellEtat* etat
+    }
+
+    class Regle {
+        +~Regle()
+        +void afficher()
+        +bool is_afficher()
+        +void x_generation()
+        +bool is_generation()
+        +void set_max_generations(int max_gen)
+        +int get_max_generations()
+        +void set_rules(int v_max, int v_min, int naiss)
+        +int get_voisins_max()
+        +int get_voisins_min()
+        +int get_naissance()
+
+        -bool graphique
+        -bool generation
+        -int max_generations
+        -int voisins_max
+        -int voisins_min
+        -int naissance
+    }
+
+    %% =========================
+    %% Patron d'état pour Cell
+    %% =========================
+    class CellEtat {
+        <<abstract>>
+        +~CellEtat()
+        +bool estVivante() const*
+        +CellEtat* clone() const*
+    }
+
+    class CellVivante {
+        +bool estVivante() const
+        +CellEtat* clone() const
+    }
+
+    class CellMorte {
+        +bool estVivante() const
+        +CellEtat* clone() const
+    }
+
+    %% =========================
+    %% Relations
+    %% =========================
+
+    %% Composition Game -> Grille
+    Game *-- Grille : grille
+
+    %% Dépendances Game
+    Game ..> Regle : utilise
+    Game ..> Cell : retourne
+
+    %% Composition Grille -> Cell (tableau de pointeurs)
+    Grille "1" *-- "0..100×100" Cell : tabcell
+
+    %% State pattern pour l'état de la cellule
+    Cell *-- CellEtat : etat
+    CellEtat <|-- CellVivante
+    CellEtat <|-- CellMorte
+
+    %% Dépendance Grille -> Cell (paramètre)
+    Grille ..> Cell : iteration(Cell*)
