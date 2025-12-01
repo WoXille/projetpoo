@@ -21,11 +21,13 @@ class Game {
     void test();
     void renderGrid(sf::RenderWindow& window, int CellSize);
     void startmenu(sf::RenderWindow& window);
-    void startmusic();
+    void startmusic() { music.play(); };
+    void stopmusic() { music.stop(); }
 
     private:
     Grille grille;
     sf::Music music;
+    sf::Font font;
 };
 
 #endif

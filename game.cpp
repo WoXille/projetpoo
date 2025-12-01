@@ -14,7 +14,18 @@ Game::~Game() {
 }
 
 void Game::init() {
+    if (!font.openFromFile("assets/fonts/Roboto-Bold.ttf")) {
+        cerr << "Erreur : impossible de charger Roboto-Bold.ttf" << endl;
+        return;
+    }
+    if (!music.openFromFile("assets/music/kahoot_music.ogg")) {  // on va parler du .ogg plus bas
+        std::cerr << "Erreur lors du chargement de la musique." << std::endl;
+        return;
+    }
+    music.setLooping(true);
+    music.setVolume(100.f); // au cas où
     grille.init();
+    
 }
 
 void Game::test() {
@@ -74,8 +85,32 @@ Cell* Game::getCell(int x, int y) const {
 }
 
 void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
+    int endgrid = CellSize * grille.getLargeur();
     window.clear();
     sf::Vector2i pos = sf::Mouse::getPosition(window);
+
+    sf::RectangleShape titleBackground(sf::Vector2f(600.f, 100.f));
+    titleBackground.setFillColor(sf::Color (140,0,0));
+    titleBackground.setPosition(sf::Vector2f(endgrid, 0.f));
+
+    sf::Text textmain(font, "Game of Life Menu", 50);
+    textmain.setFillColor(sf::Color::White);
+    textmain.setPosition(sf::Vector2f(endgrid + 100, 25.f));
+
+    int hauteurgrid;
+    if (CellSize * grille.getHauteur() < 600) {
+        hauteurgrid = 600;
+    } else {
+        hauteurgrid = CellSize * grille.getHauteur();
+    }
+
+    sf::RectangleShape infobackground(sf::Vector2f(600.f, hauteurgrid - 100.f));
+    infobackground.setFillColor(sf::Color (150,150,150));
+    infobackground.setPosition(sf::Vector2f(endgrid, 100.f));
+
+    sf::Text textinfo(font, " PAUSE = ESPACE\n\n PLAY = ENTER\n\n Rendre Vivante = Clic Gauche\n\n Rendre Morte = Clic Droit\n\n Clear la grille = C\n\n Ajouter Glider = G\n\n Ajouter Helicopter = H\n\n Play Musique = P\n\n Stop Musique = M", 24);
+    textinfo.setFillColor(sf::Color::White);
+    textinfo.setPosition(sf::Vector2f(endgrid + 20, 110.f));
     
 
     sf::RectangleShape cellShape(sf::Vector2f(CellSize - 1.0f, CellSize - 1.0f));
@@ -94,28 +129,15 @@ void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
         }
     }
 }
-
+    window.draw(titleBackground);
+    window.draw(textmain);
+    window.draw(infobackground);
+    window.draw(textinfo);
     window.display();
-}
- void Game::startmusic() {
-    if (!music.openFromFile("assets/music/kahoot_music.ogg")) {  // on va parler du .ogg plus bas
-        std::cerr << "Erreur lors du chargement de la musique." << std::endl;
-        return;
-    }
-    music.setLooping(true);
-    music.setVolume(100.f); // au cas où
-    music.play();
 }
 
 void Game::startmenu(sf::RenderWindow& window) {
     window.clear(sf::Color::Blue);
-
-    // Charger la police depuis un fichier
-    sf::Font font;
-    if (!font.openFromFile("assets/fonts/Roboto-Bold.ttf")) {
-        cerr << "Erreur : impossible de charger Roboto-Bold.ttf" << endl;
-        return;
-    }
 
     // Fond du titre
     sf::RectangleShape titleBackground(sf::Vector2f(400.f, 80.f));

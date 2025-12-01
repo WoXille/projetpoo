@@ -162,23 +162,22 @@ int main() {
     sf::Clock clock2;
 
     // Petit jeu pour le menu (10x10)
-    Game game2(10, 10);
-    sf::RenderWindow window2(
-        sf::VideoMode(sf::Vector2u(400, 400)),
-        "Menu Game of Life"
-    );
-    game2.startmenu(window2);
+
+    int hauteurgrid;
 
     // Fenêtre principale : largeur en X, longueur en Y
+    if (longueur * cellSize < 600) {
+        hauteurgrid = 600;
+    } else {
+        hauteurgrid = longueur * cellSize;
+    }
     sf::RenderWindow window(
         sf::VideoMode(sf::Vector2u(
-            static_cast<unsigned int>(largeur  * cellSize), // largeur = X
-            static_cast<unsigned int>(longueur * cellSize)  // longueur = Y
+            static_cast<unsigned int>((largeur  * cellSize)+600), // largeur = X
+            static_cast<unsigned int>(hauteurgrid)  // longueur = Y
         )),
         "Game of Life"
     );
-
-    //game.startmusic();
     bool running = true;
 
     if (Regles.is_afficher()){
@@ -235,6 +234,12 @@ int main() {
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
                 running = true;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) {
+                game.startmusic();
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M)) {
+                game.stopmusic();
             }
 
             // Mise à jour logique toutes les 100ms
