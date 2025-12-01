@@ -26,7 +26,7 @@ int main() {
     int generation_count = 0;
 
     cout << "======================================================"<< endl;
-    cout << "          Bienvenue dans le Jeu de la Vie\n";
+    cout << "          Bienvenue dans le Jeu de la Vie" << endl;
     cout << "======================================================"<< endl;
 
     while (rep != 1 && rep != 2) {
@@ -103,9 +103,13 @@ int main() {
     }
     if (rep==2){
         Regles.afficher();
+        rep = 3;
+    }   
+    else {
+        rep =2;
     }
 
-    rep = 3;
+    
     while (rep != 1 && rep != 2) {
         cout << "Veuillez choisir la methode d'initialisation :" << endl;
         cout << "  1 - Initialisation vide" << endl;
@@ -130,7 +134,7 @@ int main() {
 
     }
     if (rep == 2) {
-        cout << "Veuillez entrer le nom du fichier (avec extension) :" << endl;
+        cout << "Veuillez entrer le nom du fichier a charger (avec extension) :" << endl;
         cout << "Nom du fichier : ";
         cin >> filename;
         fichier.open(filename);
@@ -269,8 +273,11 @@ int main() {
             }
         }
     } else {
+        int loc = filename.find_last_of('.');
+        filename=filename.substr(0, loc);
+        filename+="_out.txt";
         for (int i=0; i<=Regles.get_max_generations(); i++){
-            game.display(i);
+            game.display(i, filename);
             game.runIteration(&Regles);
         }
     }
