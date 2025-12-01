@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -58,10 +59,10 @@ void Game::runIteration(Regle * Regles) {
     }
 }
 
-void Game::display(int generation) const {
-    ofstream fichier("output.txt", ios::app);
+void Game::display(int generation, std::string filename) const {
+    ofstream fichier(filename, ios::app);
     if (!fichier.is_open()) {
-        cerr << "Erreur lors de l'ouverture du fichier output.txt" << endl;
+        cerr << "Erreur lors de l'ouverture du fichier " << filename << endl;
         return;
     }
     fichier << "Generation :" << generation << endl;

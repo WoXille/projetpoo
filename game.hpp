@@ -6,6 +6,7 @@
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <vector>
+#include <string>
 
 #include "Grille.hpp"
 #include "Regle.hpp"
@@ -16,7 +17,7 @@ class Game {
 
     void init();
     void runIteration(Regle * Regles);
-    void display(int generation) const;
+    void display(int generation, std::string filename) const;
     Cell* getCell(int x, int y) const;
     void test();
     void renderGrid(sf::RenderWindow& window, int CellSize);
