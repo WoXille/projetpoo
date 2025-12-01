@@ -19,9 +19,7 @@ class Game {
     void runIteration(Regle * Regles);
     void display(int generation, std::string filename) const;
     Cell* getCell(int x, int y) const;
-    void test();
     void renderGrid(sf::RenderWindow& window, int CellSize);
-    void startmenu(sf::RenderWindow& window);
     void startmusic() { music.play(); };
     void stopmusic() { music.stop(); }
 

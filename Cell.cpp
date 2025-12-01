@@ -17,3 +17,14 @@ void Cell::RendreMorte() {
     etat = new CellMorte();
 }
 
+void Cell::RendreObstacle_Vivante() {
+    delete etat;
+    etat = new CellVivante_Obstacle();
+}
+
+void Cell::RendreObstacle_Morte() {
+    delete etat;
+    etat = new CellMorte_Obstacle();
+}
+
+

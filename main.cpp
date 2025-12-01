@@ -13,6 +13,8 @@
 
 #include "CellVivante.hpp"
 #include "CellMorte.hpp"
+#include "CellVivante_Obstacle.hpp"
+#include "CellMorte_Obstacle.hpp"
 #include "Grille.hpp"
 #include "game.hpp"
 #include "Regle.hpp"
@@ -21,9 +23,12 @@ using namespace std;
 
 int main() {
     Regle Regles;
-    int rep; 
+    int rep=0; 
     int max_generations;
     int generation_count = 0;
+    string ligne;
+    string filename;
+    ifstream fichier;
 
     cout << "======================================================"<< endl;
     cout << "          Bienvenue dans le Jeu de la Vie" << endl;
@@ -118,9 +123,7 @@ int main() {
         cin >> rep;
         cout << endl;
     }
-    string ligne;
-    string filename;
-    ifstream fichier;
+    
     int pos;
     if (rep == 1) {
         cout << "Veuillez saisir la longueur que vous souhaitez :" << endl;
@@ -148,7 +151,7 @@ int main() {
     cout << "Dimensions de la grille : " << longueur << " x " << largeur << endl << endl;
     const int cellSize = 20;
     Game game(largeur,longueur);
-
+    cout << "init grille" << endl;
     if (rep == 2) {
         for (int i = 0; i < longueur; i++) {
             getline(fichier, ligne);
@@ -229,9 +232,15 @@ int main() {
                             }
                         }
                     }
+                    
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::U)) {
+                        game.getCell(x,y)->RendreObstacle_Vivante();
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I)) {
+                        game.getCell(x,y)->RendreObstacle_Morte();
+                    }
                 }
             }
-
             // Contrôles clavier
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
                 running = false;
@@ -257,6 +266,7 @@ int main() {
                 game.renderGrid(window, cellSize);
                 clock2.restart();
             }
+            
         }
     } else {
         int loc = filename.find_last_of('.');

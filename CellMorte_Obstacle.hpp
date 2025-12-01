@@ -1,18 +1,18 @@
-#ifndef CELLMORTE_HPP
-#define CELLMORTE_HPP
+#ifndef CELLMORTE_OBSTACLE_HPP
+#define CELLMORTE_OBSTACLE_HPP
 
 #include "CellEtat.hpp"
 
-class CellMorte : public CellEtat {
+class CellMorte_Obstacle : public CellEtat {
 public:
     bool estVivante() const override {
         return false;
     }
     bool estObstacle() const override {
-        return false;
+        return true;
     }
     CellEtat* clone() const override {
-        return new CellMorte(*this);
+        return new CellMorte_Obstacle(*this);
     }
 };
 

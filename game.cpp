@@ -29,11 +29,6 @@ void Game::init() {
     
 }
 
-void Game::test() {
-    grille.getCell(0,0)->RendreVivante();
-    cout << grille.getCell(0,0)->estVivante() << endl;
-    cout << grille.getCell(0,1)->estVivante() << endl;
-}
 
 
 void Game::runIteration(Regle * Regles) {
@@ -41,7 +36,11 @@ void Game::runIteration(Regle * Regles) {
     for (int i = 0; i < grille.getLargeur(); ++i) {
         for (int j = 0; j < grille.getHauteur(); ++j) {
             Cell* cell = grille.getCell(i, j);
-            tempTab[i][j] = grille.iteration(cell);
+            if (cell->estObstacle()) {
+                tempTab[i][j] = -1; // Marquer les obstacles avec une valeur spéciale
+                continue;
+            }
+            else {tempTab[i][j] = grille.iteration(cell);}
         }
     }
 
@@ -49,8 +48,9 @@ void Game::runIteration(Regle * Regles) {
         for (int j = 0; j < grille.getHauteur(); ++j) {
             Cell* cell = grille.getCell(i, j);
             int voisinsVivants = tempTab[i][j];
-
-            if (!(cell->estVivante()) && voisinsVivants == Regles->get_naissance()) {
+            if (voisinsVivants == -1) {
+                continue; // Ignorer les obstacles
+            } else if (!(cell->estVivante()) && voisinsVivants == Regles->get_naissance()) {
                 cell->RendreVivante();
             } else if (cell->estVivante() && (voisinsVivants < Regles->get_voisins_min() || voisinsVivants > Regles->get_voisins_max())) {
                 cell->RendreMorte();
@@ -121,8 +121,18 @@ void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
                     static_cast<float>(x * CellSize),
                     static_cast<float>(y * CellSize)));
             if (grille.getCell(x, y)->estVivante()) {
-                cellShape.setFillColor(sf::Color::White);
+                if (grille.getCell(x, y)->estObstacle()) {
+                    cellShape.setFillColor(sf::Color (200, 200, 200));
+                } else {
+                    cellShape.setFillColor(sf::Color::White);
+                }
                 window.draw(cellShape);
+            }
+            else{
+                if (grille.getCell(x, y)->estObstacle()) {
+                    cellShape.setFillColor(sf::Color (100, 100, 100));
+                    window.draw(cellShape);
+                }
             }
             if (pos.x / CellSize == x && pos.y / CellSize == y) {
                 cellShape.setFillColor(sf::Color(255, 0, 0, 100)); // Rouge semi-transparent
@@ -137,21 +147,4 @@ void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
     window.display();
 }
 
-void Game::startmenu(sf::RenderWindow& window) {
-    window.clear(sf::Color::Blue);
-
-    // Fond du titre
-    sf::RectangleShape titleBackground(sf::Vector2f(400.f, 80.f));
-    titleBackground.setFillColor(sf::Color::Blue);
-    titleBackground.setPosition(sf::Vector2f(0.f, 0.f));
-
-    // Textes du menu
-    sf::Text text(font, "Game of Life Menu", 24);
-    text.setFillColor(sf::Color::White);
-    text.setPosition(sf::Vector2f(50.f, 50.f));
-
-    window.draw(titleBackground);
-    window.draw(text);
-    window.display();
-}
 

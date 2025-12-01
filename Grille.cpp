@@ -39,8 +39,8 @@ int Grille::iteration(Cell* cell) {
 
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if (i == 0 && j == 0) continue;
-
+            if (i==0 && j==0) continue;
+    
             int voisinX = x + i;
             int voisinY = y + j;
             if (voisinX < 0){
