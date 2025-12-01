@@ -197,23 +197,37 @@ int main() {
                 sf::Vector2i pos = sf::Mouse::getPosition(window);
                 int x = pos.x / cellSize; // colonne
                 int y = pos.y / cellSize; // ligne
+                
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N)) {
+                    game.setMode(0); // Mode normal
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) {
+                    game.setMode(1); // Mode Glider
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) {
+                    game.setMode(2); // Mode Helicopter
+                }
+
+                int mode = game.getMode();
+                cout << "Mode actuel : " << mode << endl;
 
                 // bornes : 0 <= x < largeur, 0 <= y < longueur
                 if (x >= 0 && x < largeur && y >= 0 && y < longueur) {
-                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && mode == 0) {
                         game.getCell(x, y)->RendreVivante();
                     }
-                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) && mode == 0) {
                         game.getCell(x, y)->RendreMorte();
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && mode == 1) {
                         game.getCell(x+1, y+1)->RendreVivante();
                         game.getCell(x+1, y)->RendreVivante();
                         game.getCell(x+1, y-1)->RendreVivante();
                         game.getCell(x-1, y)->RendreVivante();
                         game.getCell(x, y-1)->RendreVivante();
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && mode == 2) {
                         game.getCell(x, y+1)->RendreVivante();
                         game.getCell(x, y)->RendreVivante();
                         game.getCell(x, y-1)->RendreVivante();

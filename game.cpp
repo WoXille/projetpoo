@@ -14,8 +14,16 @@ Game::~Game() {
 }
 
 void Game::init() {
-    if (!font.openFromFile("assets/fonts/Roboto-Bold.ttf")) {
+    if (!Roboto.openFromFile("assets/fonts/Roboto-Bold.ttf")) {
         cerr << "Erreur : impossible de charger Roboto-Bold.ttf" << endl;
+        return;
+    }
+    if (!Cherolina.openFromFile("assets/fonts/Cherolina.ttf")) {
+        cerr << "Erreur : impossible de charger Cherolina.ttf" << endl;
+        return;
+    }
+    if (!AstonScript.openFromFile("assets/fonts/AstonScript.ttf")) {
+        cerr << "Erreur : impossible de charger AstonScript.ttf" << endl;
         return;
     }
     if (!music.openFromFile("assets/music/kahoot_music.ogg")) {  // on va parler du .ogg plus bas
@@ -25,7 +33,7 @@ void Game::init() {
     music.setLooping(true);
     music.setVolume(100.f); // au cas où
     grille.init();
-    
+
 }
 
 void Game::test() {
@@ -93,9 +101,9 @@ void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
     titleBackground.setFillColor(sf::Color (140,0,0));
     titleBackground.setPosition(sf::Vector2f(endgrid, 0.f));
 
-    sf::Text textmain(font, "Game of Life Menu", 50);
+    sf::Text textmain(AstonScript, "Game of Life", 35);
     textmain.setFillColor(sf::Color::White);
-    textmain.setPosition(sf::Vector2f(endgrid + 100, 25.f));
+    textmain.setPosition(sf::Vector2f(endgrid + 125, 30.f));
 
     int hauteurgrid;
     if (CellSize * grille.getHauteur() < 600) {
@@ -107,25 +115,57 @@ void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
     sf::RectangleShape infobackground(sf::Vector2f(600.f, hauteurgrid - 100.f));
     infobackground.setFillColor(sf::Color (150,150,150));
     infobackground.setPosition(sf::Vector2f(endgrid, 100.f));
+    
+    string modenom;
+    if (getMode() == 0) {
+        modenom = "NORMAL";
+    } else if (getMode() == 1) {
+        modenom = "GLIDER";
+    } else if (getMode() == 2) {
+        modenom = "HELICOPTER";
+    }
+    string txtinfo = " MODE ACTUEL : " + modenom + "\n\n PAUSE = ESPACE\n\n PLAY = ENTER\n\n Rendre Vivante = Clic Gauche\n\n Rendre Morte = Clic Droit\n\n Clear la grille = C\n\n Mode Normal = N\n\n Mode Glider = G\n\n Mode Helicopter = H\n\n Play Musique = P\n\n Stop Musique = M";
 
-    sf::Text textinfo(font, " PAUSE = ESPACE\n\n PLAY = ENTER\n\n Rendre Vivante = Clic Gauche\n\n Rendre Morte = Clic Droit\n\n Clear la grille = C\n\n Ajouter Glider = G\n\n Ajouter Helicopter = H\n\n Play Musique = P\n\n Stop Musique = M", 24);
+    sf::Text textinfo(Roboto, txtinfo, 24);
     textinfo.setFillColor(sf::Color::White);
     textinfo.setPosition(sf::Vector2f(endgrid + 20, 110.f));
     
 
     sf::RectangleShape cellShape(sf::Vector2f(CellSize - 1.0f, CellSize - 1.0f));
+
+    auto rendrerouge = [&](int x, int y) {
+    cellShape.setPosition(sf::Vector2f(
+        static_cast<float>(x * CellSize),
+        static_cast<float>(y * CellSize)
+    ));
+    cellShape.setFillColor(sf::Color(255, 0, 0, 100)); // Rouge semi-transparent
+    window.draw(cellShape);
+    };
+
     for (int x = 0; x < grille.getLargeur(); ++x) {
         for (int y = 0; y < grille.getHauteur(); ++y) {
-                cellShape.setPosition(sf::Vector2f(
-                    static_cast<float>(x * CellSize),
-                    static_cast<float>(y * CellSize)));
             if (grille.getCell(x, y)->estVivante()) {
+                cellShape.setPosition(sf::Vector2f(
+                static_cast<float>(x * CellSize),
+                static_cast<float>(y * CellSize)));
                 cellShape.setFillColor(sf::Color::White);
                 window.draw(cellShape);
             }
-            if (pos.x / CellSize == x && pos.y / CellSize == y) {
-                cellShape.setFillColor(sf::Color(255, 0, 0, 100)); // Rouge semi-transparent
-                window.draw(cellShape);
+            if (pos.x / CellSize == x && pos.y / CellSize == y && getMode() == 0) {
+                rendrerouge(x, y);
+            }
+
+            if (pos.x / CellSize == x && pos.y / CellSize == y && getMode() == 1) {
+                rendrerouge(x+1, y+1);
+                rendrerouge(x+1, y);
+                rendrerouge(x+1, y-1);
+                rendrerouge(x-1, y);
+                rendrerouge(x, y-1);
+            }
+            if (pos.x / CellSize == x && pos.y / CellSize == y && getMode() == 2) {
+                rendrerouge(x, y);
+                rendrerouge(x, y+1);
+                rendrerouge(x, y-1);
         }
     }
 }
@@ -136,6 +176,7 @@ void Game::renderGrid(sf::RenderWindow& window, int CellSize) {
     window.display();
 }
 
+
 void Game::startmenu(sf::RenderWindow& window) {
     window.clear(sf::Color::Blue);
 
@@ -145,7 +186,7 @@ void Game::startmenu(sf::RenderWindow& window) {
     titleBackground.setPosition(sf::Vector2f(0.f, 0.f));
 
     // Textes du menu
-    sf::Text text(font, "Game of Life Menu", 24);
+    sf::Text text(Roboto, "Game of Life Menu", 24);
     text.setFillColor(sf::Color::White);
     text.setPosition(sf::Vector2f(50.f, 50.f));
 
