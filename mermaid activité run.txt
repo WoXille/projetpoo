@@ -1,0 +1,57 @@
+graph TD
+
+    A([Debut runIteration]) --> B[Creer structure temporaire pour voisins]
+    B --> C[Initialiser i a 0]
+    C --> D{Encore une ligne i}
+    D -->|Oui| E[Initialiser j a 0]
+    D -->|Non| Z([Fin de la premiere passe])
+
+    E --> F{Encore une colonne j}
+    F -->|Oui| G[Obtenir cell = grille.getCell i j]
+    F -->|Non| Y[Incrementer i et revenir au test de ligne]
+
+    G --> H[Initialiser compteur voisins a 0]
+    H --> I[Parcourir les 8 voisins]
+    I --> J[Calcul coordonnees voisines avec tore]
+    J --> K{Voisin vivant}
+    K -->|Oui| L[Incrementer compteur voisins]
+    K -->|Non| M[Ne rien faire]
+
+    L --> N{Tous voisins traites}
+    M --> N{Tous voisins traites}
+
+    N -->|Non| I
+    N -->|Oui| O[Stocker compteur dans temp i j]
+    O --> P[Incrementer j]
+    P --> F
+
+    Y --> D
+
+    %% DEUXIEME PASSE
+
+    Z --> A2([Debut deuxieme passe])
+    A2 --> B2[Reinitialiser i a 0]
+    B2 --> C2{Encore une ligne i}
+    C2 -->|Oui| D2[Reinitialiser j a 0]
+    C2 -->|Non| Z2([Fin deuxieme passe])
+
+    D2 --> E2{Encore une colonne j}
+    E2 -->|Oui| F2[Lire cell et nbVoisins = temp i j]
+    E2 -->|Non| Y2[Incrementer i et revenir au test de ligne deuxieme passe]
+
+    F2 --> G2{Cellule vivante}
+    G2 -->|Oui| H2{nbVoisins hors intervalle min max}
+    H2 -->|Oui| I2[Appeler RendreMorte sur la cellule]
+    H2 -->|Non| J2[Cellule reste vivante]
+
+    G2 -->|Non| K2{nbVoisins egal naissance}
+    K2 -->|Oui| L2[Appeler RendreVivante sur la cellule]
+    K2 -->|Non| M2[Cellule reste morte]
+
+    I2 --> N2[Incrementer j]
+    J2 --> N2
+    L2 --> N2
+    M2 --> N2
+
+    N2 --> E2
+    Y2 --> C2

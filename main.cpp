@@ -225,16 +225,19 @@ int main() {
                         game.getCell(x, y)->RendreMorte();
                     }
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && mode == 1) {
-                        game.getCell(x+1, y+1)->RendreVivante();
-                        game.getCell(x+1, y)->RendreVivante();
-                        game.getCell(x+1, y-1)->RendreVivante();
-                        game.getCell(x-1, y)->RendreVivante();
-                        game.getCell(x, y-1)->RendreVivante();
+                        if (x+1 < largeur && y+1 < longueur && y-1 >=0 && x-1 >=0) {
+                            game.getCell(x+1, y+1)->RendreVivante();
+                            game.getCell(x+1, y)->RendreVivante();
+                            game.getCell(x+1, y-1)->RendreVivante();
+                            game.getCell(x-1, y)->RendreVivante();
+                            game.getCell(x, y-1)->RendreVivante();
                     }
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && mode == 2) {
-                        game.getCell(x, y+1)->RendreVivante();
-                        game.getCell(x, y)->RendreVivante();
-                        game.getCell(x, y-1)->RendreVivante();
+                        if (y+1 < longueur && y-1 >=0) {
+                            game.getCell(x, y+1)->RendreVivante();
+                            game.getCell(x, y)->RendreVivante();
+                            game.getCell(x, y-1)->RendreVivante();
+                        }
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C)) {
                         for (int i = 0; i < largeur; ++i) {

@@ -1,0 +1,55 @@
+graph TD
+
+    A([Debut programme]) --> B[Creation objet Regle valeurs defaut]
+    B --> C[Configuration des regles]
+    C --> D{Limiter nombre generations}
+    D -->|Oui| E[Demande max_generations puis activer mode generation limitee]
+    D -->|Non| F[Generation illimitee]
+    E --> G[Choix type affichage]
+    F --> G[Choix type affichage]
+
+    G --> H{Affichage graphique}
+    H -->|Oui| I[Activer graphique]
+    H -->|Non| J[Sortie fichier texte]
+
+    I --> K[Choix initialisation grille]
+    J --> K[Choix initialisation grille]
+
+    K --> L{Mode init}
+    L -->|Manuelle| M[Demander largeur et hauteur]
+    L -->|Fichier| N[Lire fichier et deduire dimensions]
+
+    M --> O[Creer Game et grille initiale vide]
+    N --> O[Creer Game et grille selon fichier]
+
+    O --> P{Mode graphique}
+
+    P -->|Oui| Q[Creer fenetre SFML et charger ressources]
+    Q --> R[Initialiser jeu en cours]
+    R --> S{Fenetre ouverte}
+
+    S -->|Oui| T[Gestion evenements clavier souris]
+    T --> U[Mise a jour mode dessin cellules]
+    U --> V{Jeu en cours}
+
+    V -->|Oui| W{Avancer generation}
+    W -->|Oui| X[runIteration de Game puis compteur generation +1]
+    W -->|Non| Y[Aucune evolution]
+    X --> Z[Affichage grille]
+    Y --> Z[Affichage grille]
+    Z --> S
+
+    S -->|Non| AA([Fin programme])
+
+    P -->|Non| AB[Preparer fichier sortie]
+    AB --> AC{Mode generation limitee}
+    AC -->|Oui| AD[Boucle de 0 a max_generations]
+    AC -->|Non| AE[Boucle infinie]
+
+    AD --> AF[Afficher generation dans fichier]
+    AF --> AG[Calcul generation suivante]
+    AG --> AD
+
+    AE --> AH[Afficher generation dans fichier]
+    AH --> AI[Calcul generation suivante]
+    AI --> AE
