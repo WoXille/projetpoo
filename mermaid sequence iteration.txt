@@ -1,0 +1,52 @@
+sequenceDiagram
+    participant M as main
+    participant G as Game
+    participant R as Regle
+    participant GR as Grille
+    participant C as Cell
+    participant E as CellEtat
+
+    M->>G: runIteration(R)
+    activate G
+
+    loop pour chaque cellule (i,j)
+        G->>GR: getCell(i,j)
+        GR-->>G: pointeur vers C
+
+        loop pour chaque voisin de (i,j)
+            G->>GR: getCell(x_voisin, y_voisin)
+            GR-->>G: pointeur vers Cell voisin
+            G->>C: estVivante()
+            C->>E: estVivante()
+            E-->>C: bool vivant
+            C-->>G: bool vivant
+        end
+
+        alt cellule actuelle vivante
+            G->>R: get_voisins_min()
+            R-->>G: min
+            G->>R: get_voisins_max()
+            R-->>G: max
+
+            alt nbVoisins < min ou nbVoisins > max
+                G->>C: RendreMorte()
+                C->>E: changer etat vers CellMorte
+            else
+                Note right of C: reste vivante
+            end
+
+        else cellule actuelle morte
+            G->>R: get_naissance()
+            R-->>G: naissance
+
+            alt nbVoisins == naissance
+                G->>C: RendreVivante()
+                C->>E: changer etat vers CellVivante
+            else
+                Note right of C: reste morte
+            end
+        end
+    end
+
+    deactivate G
+    G-->>M: fin de runIteration

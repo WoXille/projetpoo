@@ -4,6 +4,8 @@
 #include "CellEtat.hpp"
 #include "CellVivante.hpp"
 #include "CellMorte.hpp"
+#include "CellVivante_Obstacle.hpp"
+#include "CellMorte_Obstacle.hpp"
 
 class Cell {
 private:
@@ -22,7 +24,10 @@ public:
 
     void RendreVivante();
     void RendreMorte();
-    bool estVivante() const { return etat->estVivante(); }
+    void RendreObstacle_Vivante();
+    void RendreObstacle_Morte();
+    bool estVivante() const { return etat->estVivante();}
+    bool estObstacle() const{ return etat->estObstacle(); }
 };
 
 #endif // CELL_HPP

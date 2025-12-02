@@ -1,0 +1,45 @@
+sequenceDiagram
+    participant U as Utilisateur
+    participant M as main
+    participant G as Game
+    participant GR as Grille
+    participant C as Cell
+    participant E as CellEtat
+    participant EM as CellMorte
+
+    %% Choix des dimensions
+    U->>M: Saisir largeur et hauteur
+
+    %% Creation du jeu
+    M->>G: new Game(largeur, hauteur)
+    activate G
+    G->>GR: construire Grille(largeur, hauteur)
+    activate GR
+    GR-->>G: Grille construite
+    deactivate GR
+    G-->>M: Game construit
+    deactivate G
+
+    %% Initialisation de la grille
+    M->>G: init()
+    activate G
+    G->>GR: init()
+    activate GR
+
+    loop pour chaque position (x,y)
+        GR->>C: new Cell(x, y)
+        activate C
+        C->>EM: new CellMorte()
+        activate EM
+        EM-->>C: pointeur vers CellMorte
+        deactivate EM
+        C->>E: stocker etat = CellMorte (CellEtat*)
+        C-->>GR: pointeur vers Cell
+        deactivate C
+        GR->>GR: ranger le pointeur dans tabcell[x][y]
+    end
+
+    GR-->>G: fin de init()
+    deactivate GR
+    G-->>M: fin de init()
+    deactivate G

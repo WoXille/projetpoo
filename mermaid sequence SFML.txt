@@ -1,0 +1,45 @@
+sequenceDiagram
+    participant U as Utilisateur
+    participant M as main
+    participant R as Regle
+    participant G as Game
+    participant W as RenderWindow
+    participant C as Cell
+
+    M->>R: Configurer regles (graphique)
+    M->>G: new Game(l,h)
+    M->>W: Creer fenetre SFML
+    M->>G: init()
+    M->>G: startmusic()
+
+    loop Tant que fenetre ouverte
+        M->>W: pollEvent()
+
+        alt Event = Closed
+            M->>W: close()
+        else Event = KeyPressed
+            U->>M: Appui sur touche
+            M->>G: Modifier mode / pause / clear
+        end
+
+        alt Event = MousePressed
+            U->>M: clic souris
+            M->>G: getCell(x,y)
+            G-->>M: pointeur C
+            M->>C: modifier etat selon mode
+        end
+
+        alt running et delai ecoule
+            M->>G: runIteration(&R)
+            G-->>M: grille mise a jour
+        else
+            Note right of G: pas d evolution
+        end
+
+        M->>W: clear()
+        M->>G: renderGrid(W)
+        G->>W: draw()
+        M->>W: display()
+    end
+
+    M->>G: stopmusic()
