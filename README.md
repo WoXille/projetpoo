@@ -1,4 +1,4 @@
-### **Introduction**
+## **Introduction**
 
 
 
@@ -8,6 +8,7 @@ Notre programme permet de choisir entre deux modes d’affichage :
 •	un mode graphique, basé sur la bibliothèque SFML, offrant une interaction directe avec la grille, la création de motifs et un retour visuel immédiat
 
 
+
 L’utilisateur peut initialiser la grille de manière vide et ensuite la remplir, ou bien via un fichier normalisé. Il peut, au travers d’une console, changer les règles et paramètres de la simulation.
 
 D’un point de vu technique, notre programme repose sur les concepts de « Programmation Orientée Objet » (POO). Il est découpé en une multitude de classes qui permettent une lecture et une maintenance simplifiée
@@ -15,7 +16,7 @@ Cette documentation présente les différents fichiers, leur fonctionnement gén
 
 
 
-### **Prérequis de compilation et d’exécution :**
+## **Prérequis de compilation et d’exécution :**
 
 
 
@@ -57,12 +58,14 @@ Bash : sudo apt install libsfml-dev
   git clone https://github.com/SFML/SFML
 
 
-**Optionnel : Fichier d’initialisation :**
----
+
+#### **Optionnel : Fichier d’initialisation :**
+
 
 
 Vous avez la possibilité d’initialiser la grille à partir d’un fichier. Pour se faire, vous devez placer un fichier .txt (et UNIQUEMENT .txt) dans le même dossier que le programme « main.cpp ».
 Vous devrez ensuite, lors de l’exécution du programme, écrire le nom du fichier (avec son extension), dans l’entrée console demandée.
+
 
 
 Votre fichier .txt doit cependant respecter une normalisation précise imposée :
@@ -76,6 +79,7 @@ L H
 
 Avec L = nombre de lignes
 Et H = nombre de colonne
+
 
 
 D’ailleurs, sachez que si les entrées ne sont pas « complètes » (moins d’entrées que la longueur ou la hauteur rentrée), le programme ignorera simplement les cases non-initialisées et les initialisera automatiquement comme mortes.
