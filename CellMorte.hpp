@@ -18,10 +18,6 @@ public:
         return false;
     }
 
-    // Création d'une copie polymorphique de cet état.
-    CellEtat* clone() const override {
-        return new CellMorte(*this);
-    }
 };
 
 #endif

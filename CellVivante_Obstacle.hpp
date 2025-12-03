@@ -18,11 +18,6 @@ public:
     bool estObstacle() const override {
         return true;
     }
-
-    // Retourne une copie polymorphique de cet état.
-    CellEtat* clone() const override {
-        return new CellVivante_Obstacle(*this);
-    }
 };
 
 #endif

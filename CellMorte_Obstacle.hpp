@@ -19,10 +19,6 @@ public:
         return true;
     }
 
-    // Retourne une copie polymorphique de l'état.
-    CellEtat* clone() const override {
-        return new CellMorte_Obstacle(*this);
-    }
 };
 
 #endif

@@ -10,7 +10,6 @@ classDiagram
         +void runIteration(Regle* Regles)
         +void display(int generation, std::string filename) const
         +Cell* getCell(int x, int y) const
-        +void test()
         +void renderGrid(sf::RenderWindow& window, int CellSize)
         +void startmenu(sf::RenderWindow& window)
         +void startmusic()
@@ -34,7 +33,6 @@ classDiagram
         +int getHauteur() const
         +Cell* getCell(int x, int y) const
         +int iteration(Cell* cell)
-        +Cell** gettabcell()
 
         -int largeur
         -int hauteur
@@ -48,7 +46,10 @@ classDiagram
         +int getY() const
         +void RendreVivante()
         +void RendreMorte()
+	+void RendreObstacle_Vivante();
+    	+void RendreObstacle_Morte();
         +bool estVivante() const
+	+bool estObstacle() const
 
         -int x
         -int y
@@ -83,17 +84,27 @@ classDiagram
         <<abstract>>
         +~CellEtat()
         +bool estVivante() const*
-        +CellEtat* clone() const*
+        +bool estObstacle() const*
     }
 
     class CellVivante {
         +bool estVivante() const
-        +CellEtat* clone() const
+        +bool estObstacle() const
     }
 
     class CellMorte {
         +bool estVivante() const
-        +CellEtat* clone() const
+        +bool estObstacle() const
+    }
+
+    class CellMorte_Obstacle {
+        +bool estVivante() const
+        +bool estObstacle() const
+    }
+
+    class CellVivante_Obstacle {
+        +bool estVivante() const
+        +bool estObstacle() const
     }
 
     %% =========================
@@ -114,6 +125,8 @@ classDiagram
     Cell *-- CellEtat : etat
     CellEtat <|-- CellVivante
     CellEtat <|-- CellMorte
+    CellEtat <|-- CellVivante_Obstacle
+    CellEtat <|-- CellMorte_Obstacle
 
     %% Dépendance Grille -> Cell (paramètre)
     Grille ..> Cell : iteration(Cell*)

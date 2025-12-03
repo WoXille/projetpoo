@@ -13,37 +13,48 @@ sequenceDiagram
         G->>GR: getCell(i,j)
         GR-->>G: pointeur vers C
 
-        loop pour chaque voisin de (i,j)
-            G->>GR: getCell(x_voisin, y_voisin)
-            GR-->>G: pointeur vers Cell voisin
-            G->>C: estVivante()
-            C->>E: estVivante()
-            E-->>C: bool vivant
-            C-->>G: bool vivant
-        end
+        G->>C: estObstacle()
+        C->>E: estObstacle()
+        E-->>C: bool obstacle
+        C-->>G: bool obstacle
 
-        alt cellule actuelle vivante
-            G->>R: get_voisins_min()
-            R-->>G: min
-            G->>R: get_voisins_max()
-            R-->>G: max
+        alt cellule obstacle
+            Note right of C: La cellule n'évolue pas<br/>(ne change jamais d'état)
+        else cellule normale
+            %% Comptage des voisins vivants
+            loop pour chaque voisin
+                G->>GR: getCell(x_voisin, y_voisin)
+                GR-->>G: voisin = Cell
 
-            alt nbVoisins < min ou nbVoisins > max
-                G->>C: RendreMorte()
-                C->>E: changer etat vers CellMorte
-            else
-                Note right of C: reste vivante
+                G->>voisin: estVivante()
+                voisin->>E: estVivante()
+                E-->>voisin: bool vivant
+                voisin-->>G: bool vivant
             end
 
-        else cellule actuelle morte
-            G->>R: get_naissance()
-            R-->>G: naissance
+            alt cellule vivante
+                G->>R: get_voisins_min()
+                R-->>G: min
+                G->>R: get_voisins_max()
+                R-->>G: max
 
-            alt nbVoisins == naissance
-                G->>C: RendreVivante()
-                C->>E: changer etat vers CellVivante
-            else
-                Note right of C: reste morte
+                alt nbVoisins < min ou nbVoisins > max
+                    G->>C: RendreMorte()
+                    C->>E: changer état → CellMorte
+                else
+                    Note right of C: reste vivante
+                end
+
+            else cellule morte
+                G->>R: get_naissance()
+                R-->>G: naissance
+
+                alt nbVoisins == naissance
+                    G->>C: RendreVivante()
+                    C->>E: changer état → CellVivante
+                else
+                    Note right of C: reste morte
+                end
             end
         end
     end

@@ -40,12 +40,6 @@ public:
     // Renvoie le nombre de voisins vivants de la cellule passée en paramètre.
     // Calcul réalisé avec gestion des bords en tore.
     int iteration(Cell* cell);
-
-    // Renvoie un pointeur sur la première ligne du tableau 2D de cellules.
-    // Méthode utilisée pour accéder aux données brutes du tableau si nécessaire.
-    Cell** gettabcell() {
-        return *tabcell;
-    } 
-};
+};  
 
 #endif // GRILLE_HPP

@@ -238,7 +238,6 @@ int main() {
                 }
                 
                 int mode = game.getMode();
-                cout << "Mode actuel : " << mode << endl;
 
                 // Vérification que la position souris se trouve dans la grille.
                 // bornes : 0 <= x < largeur, 0 <= y < longueur

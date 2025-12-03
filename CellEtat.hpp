@@ -20,9 +20,6 @@ class CellEtat {
     // Permet des comportements spéciaux selon les règles du jeu.
     virtual bool estObstacle() const = 0;
 
-    // Méthode de clonage permettant de dupliquer dynamiquement
-    // l'état courant de la cellule
-    virtual CellEtat* clone() const = 0;
 };
 
 #endif
